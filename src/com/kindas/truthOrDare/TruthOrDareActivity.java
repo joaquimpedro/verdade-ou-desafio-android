@@ -126,9 +126,8 @@ public class TruthOrDareActivity extends FragmentActivity {
 						EditText name = (EditText) rootView.findViewById(R.id.editTextName);
 						people.add(name.getText().toString());
 						adapter.notifyDataSetChanged();
-						name.setText("");
-						
 						Toast.makeText(rootView.getContext(), name.getText() + " Foi add a lista de participantes!", Toast.LENGTH_SHORT).show();
+						name.setText("");
 					}
 				});
 				
