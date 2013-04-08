@@ -1,6 +1,7 @@
 package com.kindas.truthOrDare;
 
 import java.util.Locale;
+import java.util.Random;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kindas.truthOrDare.adpter.PeopleAdapter;
@@ -102,6 +104,7 @@ public class TruthOrDareActivity extends FragmentActivity {
 		 * fragment.
 		 */
 		public static final String ARG_SECTION_NUMBER = "section_number";
+		final People people = new People();
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -110,10 +113,36 @@ public class TruthOrDareActivity extends FragmentActivity {
 
 			if (getArguments().getInt(ARG_SECTION_NUMBER) % 2 == 0) {
 				rootView = inflater.inflate(R.layout.truth_or_dare, container, false);
+				
+				Button sort = (Button) rootView.findViewById(R.id.btnSort);
+				
+				final TextView interviewer = (TextView) rootView.findViewById(R.id.txtInterviewer);
+				final TextView victim = (TextView) rootView.findViewById(R.id.txtVictim);
+				final TextView to = (TextView) rootView.findViewById(R.id.txtTo);
+				
+				
+				sort.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						Random random = new Random();
+						int posInterviewer = random.nextInt(people.getPeoples().size());
+						int posVictim = random.nextInt();
+						
+						posVictim = posInterviewer == posVictim ? random.nextInt() : posVictim;
+						
+						interviewer.setText(people.get(posInterviewer).getName());
+						victim.setText(people.get(posVictim).getName());
+						
+						interviewer.setVisibility(View.VISIBLE);
+						victim.setVisibility(View.VISIBLE);
+						to.setVisibility(View.VISIBLE);
+					}
+				});
+				
 			} else {
 				rootView = inflater.inflate(R.layout.truth_or_dare_peoples, container, false);
 				
-				final People people = new People();
 				ListView listPeoples = (ListView) rootView.findViewById(R.id.listPeople);
 				final PeopleAdapter adapter = new PeopleAdapter(rootView.getContext(), people.getPeoples());
 				listPeoples.setAdapter(adapter);

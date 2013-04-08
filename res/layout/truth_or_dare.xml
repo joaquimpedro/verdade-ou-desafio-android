@@ -8,14 +8,46 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".TruthOrDareActivity$DummySectionFragment" >
 
-    <Button
-        android:id="@+id/button1"
+    <TextView
+        android:id="@+id/txtVictim"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/txtInterviewer"
+        android:layout_below="@+id/txtInterviewer"
+        android:layout_marginTop="63dp"
+        android:text="Large Text"
+        android:visibility="invisible"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/txtTo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtInterviewer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:text="para"
+        android:visibility="invisible"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/txtInterviewer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="87dp"
-        android:layout_marginTop="148dp"
-        android:text="Button" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:text="Large Text"
+        android:visibility="invisible"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/btnSort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="115dp"
+        android:text="Sort" />
 
 </RelativeLayout>

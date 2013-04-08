@@ -32,4 +32,8 @@ public class People {
 	public void add(String name) {
 		this.peoples.add(new People(name));
 	}
+
+	public People get(int index) {
+		return this.peoples.get(index);
+	}
 }
