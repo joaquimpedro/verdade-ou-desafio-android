@@ -50,4 +50,22 @@
         android:layout_marginBottom="115dp"
         android:text="Sort" />
 
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="19dp"
+        android:layout_toLeftOf="@+id/btnSort"
+        android:background="@drawable/cancel"/>
+
+    <Button
+        android:id="@+id/btnOk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/cancel"
+        android:layout_alignBottom="@+id/cancel"
+        android:layout_toRightOf="@+id/btnSort"
+        android:background="@drawable/ok" />
+
 </RelativeLayout>

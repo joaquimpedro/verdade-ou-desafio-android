@@ -33,6 +33,10 @@ public class TruthOrDareActivity extends FragmentActivity {
 	 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
 	 */
 	SectionsPagerAdapter mSectionsPagerAdapter;
+	final static People people = new People();
+	static Integer posInterviewer = null;
+	static Integer posVictim;
+	static PeopleAdapter adapterPeoples;
 
 	/**
 	 * The {@link ViewPager} that will host the section contents.
@@ -69,6 +73,7 @@ public class TruthOrDareActivity extends FragmentActivity {
 			// getItem is called to instantiate the fragment for the given page.
 			// Return a DummySectionFragment (defined as a static inner class
 			// below) with the page number as its lone argument.
+			People people = null;
 			Fragment fragment = new DummySectionFragment();
 			Bundle args = new Bundle();
 			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
@@ -104,7 +109,8 @@ public class TruthOrDareActivity extends FragmentActivity {
 		 * fragment.
 		 */
 		public static final String ARG_SECTION_NUMBER = "section_number";
-		final People people = new People();
+
+		// final People people = new People();
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -113,39 +119,48 @@ public class TruthOrDareActivity extends FragmentActivity {
 
 			if (getArguments().getInt(ARG_SECTION_NUMBER) % 2 == 0) {
 				rootView = inflater.inflate(R.layout.truth_or_dare, container, false);
-				
+
 				Button sort = (Button) rootView.findViewById(R.id.btnSort);
-				
+
 				final TextView interviewer = (TextView) rootView.findViewById(R.id.txtInterviewer);
 				final TextView victim = (TextView) rootView.findViewById(R.id.txtVictim);
 				final TextView to = (TextView) rootView.findViewById(R.id.txtTo);
-				
-				
+
 				sort.setOnClickListener(new OnClickListener() {
-					
+
 					@Override
 					public void onClick(View v) {
-						Random random = new Random();
-						int posInterviewer = random.nextInt(people.getPeoples().size());
-						int posVictim = random.nextInt();
-						
-						posVictim = posInterviewer == posVictim ? random.nextInt() : posVictim;
-						
-						interviewer.setText(people.get(posInterviewer).getName());
-						victim.setText(people.get(posVictim).getName());
-						
-						interviewer.setVisibility(View.VISIBLE);
-						victim.setVisibility(View.VISIBLE);
-						to.setVisibility(View.VISIBLE);
+						sortPeoples(interviewer, victim, to);
+					}
+
+				});
+
+				Button ok = (Button) rootView.findViewById(R.id.btnOk);
+				Button cancel = (Button) rootView.findViewById(R.id.btnCancel);
+				
+				ok.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						sortPeoples(interviewer, victim, to);
 					}
 				});
 				
+				cancel.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						String name = people.getPeoples().get(posVictim).getName();
+						people.getPeoples().remove(posVictim);
+						adapterPeoples.notifyDataSetChanged();
+						Toast.makeText(rootView.getContext(), name + " Foi removida da lista de participantes por não seguir as regras do jogo!", Toast.LENGTH_SHORT).show();
+					}
+				});
+
 			} else {
 				rootView = inflater.inflate(R.layout.truth_or_dare_peoples, container, false);
-				
+
 				ListView listPeoples = (ListView) rootView.findViewById(R.id.listPeople);
-				final PeopleAdapter adapter = new PeopleAdapter(rootView.getContext(), people.getPeoples());
-				listPeoples.setAdapter(adapter);
+				adapterPeoples = new PeopleAdapter(rootView.getContext(), people.getPeoples());
+				listPeoples.setAdapter(adapterPeoples);
 
 				Button addPeople = (Button) rootView.findViewById(R.id.btnAddPeople);
 				addPeople.setOnClickListener(new OnClickListener() {
@@ -154,16 +169,43 @@ public class TruthOrDareActivity extends FragmentActivity {
 					public void onClick(View arg0) {
 						EditText name = (EditText) rootView.findViewById(R.id.editTextName);
 						people.add(name.getText().toString());
-						adapter.notifyDataSetChanged();
+						adapterPeoples.notifyDataSetChanged();
 						Toast.makeText(rootView.getContext(), name.getText() + " Foi add a lista de participantes!", Toast.LENGTH_SHORT).show();
 						name.setText("");
 					}
 				});
-				
+
 			}
 
 			return rootView;
 		}
+	}
+
+	private static int getNext(Integer last, Integer diff) {
+		Random random = new Random();
+		diff = diff == null ? last : diff;
+		Integer next = random.nextInt(people.getPeoples().size());
+		while (next == diff) {
+			next = random.nextInt(people.getPeoples().size());
+		}
+		if (last == null)
+			return next;
+		while (next == last) {
+			next = random.nextInt(people.getPeoples().size());
+		}
+		return next;
+	}
+
+	private static void sortPeoples(final TextView interviewer, final TextView victim, final TextView to) {
+		posInterviewer = getNext(posInterviewer, posVictim);
+		posVictim = getNext(posVictim, posInterviewer);
+
+		interviewer.setText(people.get(posInterviewer).getName());
+		victim.setText(people.get(posVictim).getName());
+
+		interviewer.setVisibility(View.VISIBLE);
+		victim.setVisibility(View.VISIBLE);
+		to.setVisibility(View.VISIBLE);
 	}
 
 }
