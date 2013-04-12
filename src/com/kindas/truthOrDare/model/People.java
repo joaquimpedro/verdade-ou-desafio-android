@@ -26,7 +26,11 @@ public class People {
 	}
 
 	public List<People> getPeoples() {
-		return peoples;
+		return this.peoples;
+	}
+	
+	public void setPeoples(List<People> peoples) {
+		this.peoples = peoples;
 	}
 
 	public void add(String name) {

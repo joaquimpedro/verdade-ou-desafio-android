@@ -1,5 +1,7 @@
 package com.kindas.truthOrDare;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -9,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.GetChars;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -149,8 +152,13 @@ public class TruthOrDareActivity extends FragmentActivity {
 					@Override
 					public void onClick(View v) {
 						String name = people.getPeoples().get(posVictim).getName();
-						people.getPeoples().remove(posVictim);
+						people.getPeoples().remove(people.getPeoples().get(posVictim));
 						adapterPeoples.notifyDataSetChanged();
+						
+						interviewer.setVisibility(View.INVISIBLE);
+						victim.setVisibility(View.INVISIBLE);
+						to.setVisibility(View.INVISIBLE);
+						
 						Toast.makeText(rootView.getContext(), name + " Foi removida da lista de participantes por não seguir as regras do jogo!", Toast.LENGTH_SHORT).show();
 					}
 				});
@@ -197,6 +205,14 @@ public class TruthOrDareActivity extends FragmentActivity {
 	}
 
 	private static void sortPeoples(final TextView interviewer, final TextView victim, final TextView to) {
+		if(people.getPeoples().size() == 1) {
+			Toast.makeText(interviewer.getContext(), "Para iniciar o game você deve adcionar no mínimo mais 1 pessoa", Toast.LENGTH_SHORT).show();
+			return;
+		} else if (people.getPeoples().size() == 0) {
+			Toast.makeText(interviewer.getContext(), "Para iniciar o game você deve adcionar no mínimo mais 2 pessoa", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
 		posInterviewer = getNext(posInterviewer, posVictim);
 		posVictim = getNext(posVictim, posInterviewer);
 
